@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - AI Language Learning{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+    }
+    
+    .category-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+        padding: 30px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .category-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+    
+    .category-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+    
+    .category-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    
+    .category-description {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-bottom: 20px;
+    }
+    
+    .category-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    
+    .stat-label {
+        font-size: 0.85rem;
+        opacity: 0.8;
+    }
+    
+    .recent-sessions {
+        margin-top: 50px;
+    }
+    
+    .session-item {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .session-info {
+        flex: 1;
+    }
+    
+    .session-title {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    .session-meta {
+        color: #666;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Welcome to Your Learning Dashboard</h1>
+    <p style="color: #666; font-size: 1.1rem;">Choose a chat category to start learning:</p>
+    
+    <div class="chat-categories">
+        <!-- Language Learning Assistance -->
+        <div class="category-card" onclick="window.location.href='{% url 'chat:create_session' 'assistance' %}'">
+            <div class="category-icon">📚</div>
+            <div class="category-title">Language Learning Assistance</div>
+            <div class="category-description">
+                Get personalized help with vocabulary, grammar, pronunciation, and conversation practice.
+            </div>
+            <div class="category-stats">
+                <div class="stat-item">
+                    <div class="stat-value">{{ progress_data.assistance.level }}</div>
+                    <div class="stat-label">Level</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ progress_data.assistance.total_sessions }}</div>
+                    <div class="stat-label">Sessions</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quiz Chat -->
+        <div class="category-card" onclick="window.location.href='{% url 'chat:create_session' 'quiz' %}'">
+            <div class="category-icon">🎯</div>
+            <div class="category-title">Quiz Chat</div>
+            <div class="category-description">
+                Test your knowledge with interactive quizzes and get instant feedback on your answers.
+            </div>
+            <div class="category-stats">
+                <div class="stat-item">
+                    <div class="stat-value">{{ progress_data.quiz.level }}</div>
+                    <div class="stat-label">Level</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ progress_data.quiz.quiz_score_avg|floatformat:0 }}%</div>
+                    <div class="stat-label">Avg Score</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Matching Chat -->
+        <div class="category-card" onclick="window.location.href='{% url 'chat:create_session' 'matching' %}'">
+            <div class="category-icon">🔄</div>
+            <div class="category-title">Matching Chat</div>
+            <div class="category-description">
+                Match words, phrases, or concepts to improve your vocabulary and understanding.
+            </div>
+            <div class="category-stats">
+                <div class="stat-item">
+                    <div class="stat-value">{{ progress_data.matching.level }}</div>
+                    <div class="stat-label">Level</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">{{ progress_data.matching.total_sessions }}</div>
+                    <div class="stat-label">Sessions</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if recent_sessions %}
+<div class="recent-sessions">
+    <div class="card">
+        <h2>Recent Chat Sessions</h2>
+        {% for session in recent_sessions %}
+        <div class="session-item">
+            <div class="session-info">
+                <div class="session-title">{{ session.title }}</div>
+                <div class="session-meta">
+                    {{ session.get_chat_type_display }} • {{ session.updated_at|date:"F d, Y H:i" }}
+                </div>
+            </div>
+            <a href="{% url 'chat:chat_room' session.id %}" class="btn btn-primary">Continue</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
