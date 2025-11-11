@@ -139,9 +139,10 @@ LOGIN_REDIRECT_URL = 'chat:dashboard'
 LOGOUT_REDIRECT_URL = 'accounts:login'
 
 # N8n Webhook URLs (configure these in your .env file)
-N8N_WEBHOOK_ASSISTANCE = 'https://n8n.mettagarden.live/webhook/language-learning-chat'
-N8N_WEBHOOK_QUIZ = 'https://n8n.mettagarden.live/webhook/language-learning-chat'
-N8N_WEBHOOK_MATCHING = 'https://n8n.mettagarden.live/webhook/language-learning-chat'
+N8N_WEBHOOK_ASSISTANCE = 'https://n8n.mettagarden.live/webhook/language-learning-assistant-chat'
+N8N_WEBHOOK_QUIZ = 'https://n8n.mettagarden.live/webhook/language-learning-quiz-chat'
+N8N_WEBHOOK_MATCHING = 'https://n8n.mettagarden.live/webhook/language-learning-matching-chat'
+
 
 # Session settings
 SESSION_COOKIE_AGE = 86400  # 24 hours
